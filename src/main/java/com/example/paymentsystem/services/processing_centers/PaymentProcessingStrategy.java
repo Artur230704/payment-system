@@ -5,7 +5,7 @@ import com.example.paymentsystem.dtos.CardReplenishmentDTO;
 import com.example.paymentsystem.dtos.CardWithdrawalDTO;
 
 public interface PaymentProcessingStrategy {
-    String issueCard(CardIssuanceDTO cardIssuanceDTO);
-    String replenishBalance(CardReplenishmentDTO cardReplenishmentDTO);
-    String withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO);
+    boolean issueCard(CardIssuanceDTO cardIssuanceDTO);
+    boolean replenishBalance(CardReplenishmentDTO cardReplenishmentDTO);
+    boolean withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO);
 }

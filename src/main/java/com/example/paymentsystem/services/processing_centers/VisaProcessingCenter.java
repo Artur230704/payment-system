@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VisaProcessingCenter implements PaymentProcessingStrategy {
     @Override
-    public String issueCard(CardIssuanceDTO cardIssuanceDTO) {
-        return null;
+    public boolean issueCard(CardIssuanceDTO cardIssuanceDTO) {
+        return true;
     }
 
     @Override
-    public String replenishBalance(CardReplenishmentDTO cardReplenishmentDTO) {
-        return null;
+    public boolean replenishBalance(CardReplenishmentDTO cardReplenishmentDTO) {
+        return true;
     }
 
     @Override
-    public String withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
-        return null;
+    public boolean withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
+        return true;
     }
 }

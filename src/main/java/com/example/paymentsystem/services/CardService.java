@@ -13,17 +13,17 @@ import org.springframework.stereotype.Service;
 public class CardService {
     private final PaymentProcessingFactory paymentProcessingFactory;
 
-    public String issueCard(CardIssuanceDTO cardIssuanceDTO) {
+    public boolean issueCard(CardIssuanceDTO cardIssuanceDTO) {
         PaymentProcessingStrategy paymentProcessingStrategy = paymentProcessingFactory.getPaymentStrategy(cardIssuanceDTO.getPaymentSystem());
         return paymentProcessingStrategy.issueCard(cardIssuanceDTO);
     }
 
-    public String replenishBalance(CardReplenishmentDTO replenishmentDTO) {
+    public boolean replenishBalance(CardReplenishmentDTO replenishmentDTO) {
         PaymentProcessingStrategy paymentProcessingStrategy = paymentProcessingFactory.getPaymentStrategy(replenishmentDTO.getPaymentSystem());
         return paymentProcessingStrategy.replenishBalance(replenishmentDTO);
     }
 
-    public String withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
+    public boolean withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
         PaymentProcessingStrategy paymentProcessingStrategy = paymentProcessingFactory.getPaymentStrategy(cardWithdrawalDTO.getPaymentSystem());
         return paymentProcessingStrategy.withdrawFunds(cardWithdrawalDTO);
     }
