@@ -8,11 +8,13 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-public class CardReplenishmentDTO {
+public class CardWithdrawalDTO {
     @NotNull(message = "Введите название платежной системы")
     private String paymentSystem;
     @NotNull(message = "Введите номер карты")
     private String cardNumber;
-    @Min(value = 20, message = "Минимальная сумма для пополения 20 сом")
+    @NotNull(message = "Введите cvv")
+    private String cvv;
+    @Min(value = 50, message = "Минимальная сумма для снятия 50 сом")
     private double amount;
 }
