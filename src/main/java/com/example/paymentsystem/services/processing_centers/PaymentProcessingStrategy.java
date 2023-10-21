@@ -1,4 +1,4 @@
-package com.example.paymentsystem.services;
+package com.example.paymentsystem.services.processing_centers;
 
 import com.example.paymentsystem.dtos.CardIssuanceDTO;
 import com.example.paymentsystem.dtos.CardReplenishmentDTO;
