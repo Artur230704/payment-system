@@ -1,5 +1,6 @@
 package com.example.paymentsystem.services.processing_centers;
 
+import com.example.paymentsystem.exceptions.PaymentSystemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,6 @@ public class PaymentProcessingFactory {
                 return entry.getValue();
             }
         }
-        throw new IllegalArgumentException("Платежная система не найдена");
+        throw new PaymentSystemNotFoundException("Платежная система не найдена");
     }
 }
