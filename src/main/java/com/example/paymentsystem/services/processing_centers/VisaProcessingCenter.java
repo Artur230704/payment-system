@@ -6,6 +6,7 @@ import com.example.paymentsystem.dtos.CardWithdrawalDTO;
 import com.example.paymentsystem.entities.Card;
 import com.example.paymentsystem.entities.Client;
 import com.example.paymentsystem.entities.PaymentSystem;
+import com.example.paymentsystem.exceptions.CardNotFoundException;
 import com.example.paymentsystem.repostiories.CardRepository;
 import com.example.paymentsystem.services.ClientService;
 import com.example.paymentsystem.services.PaymentSystemService;
@@ -39,6 +40,16 @@ public class VisaProcessingCenter implements PaymentProcessingStrategy {
 
     @Override
     public boolean replenishBalance(CardReplenishmentDTO cardReplenishmentDTO) {
+        PaymentSystem paymentSystem = paymentSystemService.findBySystemName(cardReplenishmentDTO.getPaymentSystem());
+        Card card = cardRepository.findByCardNumberAndPaymentSystem(cardReplenishmentDTO.getCardNumber(), paymentSystem)
+                .orElseThrow(() -> new CardNotFoundException("Карта visa не найдена"));
+
+        double replenishmentAmount = cardReplenishmentDTO.getAmount();
+        double percent = paymentSystem.getPercent();
+        double amountToAdd = replenishmentAmount - (replenishmentAmount * percent / 100);
+
+        card.setBalance(card.getBalance() + amountToAdd);
+        cardRepository.save(card);
         return true;
     }
 
