@@ -6,7 +6,10 @@ import com.example.paymentsystem.dtos.CardWithdrawalDTO;
 import com.example.paymentsystem.entities.Card;
 import com.example.paymentsystem.entities.Client;
 import com.example.paymentsystem.entities.PaymentSystem;
+import com.example.paymentsystem.exceptions.CardAlreadyIssuedException;
 import com.example.paymentsystem.exceptions.CardNotFoundException;
+import com.example.paymentsystem.exceptions.InvalidPinException;
+import com.example.paymentsystem.exceptions.NotEnoughFundsException;
 import com.example.paymentsystem.repostiories.CardRepository;
 import com.example.paymentsystem.services.ClientService;
 import com.example.paymentsystem.services.PaymentSystemService;
@@ -24,26 +27,28 @@ public class VisaProcessingCenter implements PaymentProcessingStrategy {
     private final ClientService clientService;
     private final CardRepository cardRepository;
     private final CardUtil cardUtil;
+
     @Override
-    public boolean issueCard(CardIssuanceDTO cardIssuanceDTO) {
+    public String issueCard(CardIssuanceDTO cardIssuanceDTO) {
         PaymentSystem paymentSystem = paymentSystemService.findBySystemName(cardIssuanceDTO.getPaymentSystem());
 
         if (cardUtil.isCardIssuedForPhoneNumber(cardIssuanceDTO, paymentSystem)) {
-            return false;
+            throw new CardAlreadyIssuedException("На данный номер телефона уже зарегестрирована карта VISA");
         }
 
         Optional<Client> client = clientService.findByPassportNumber(cardIssuanceDTO.getPassportNumber());
         Client targetClient = client.orElseGet(() -> clientService.saveClient(cardIssuanceDTO));
         buildVisaCard(cardIssuanceDTO, targetClient, paymentSystem);
 
-        return true;
+        return "Карта VISA выпущена";
     }
 
+
     @Override
-    public boolean replenishBalance(CardReplenishmentDTO cardReplenishmentDTO) {
+    public String replenishBalance(CardReplenishmentDTO cardReplenishmentDTO) {
         PaymentSystem paymentSystem = paymentSystemService.findBySystemName(cardReplenishmentDTO.getPaymentSystem());
         Card card = cardRepository.findByCardNumberAndPaymentSystem(cardReplenishmentDTO.getCardNumber(), paymentSystem)
-                .orElseThrow(() -> new CardNotFoundException("Карта visa не найдена"));
+                .orElseThrow(() -> new CardNotFoundException("Карта VISA не найдена"));
 
         double replenishmentAmount = cardReplenishmentDTO.getAmount();
         double percent = paymentSystem.getPercent();
@@ -52,23 +57,27 @@ public class VisaProcessingCenter implements PaymentProcessingStrategy {
         card.setBalance(card.getBalance() + amountToAdd);
         cardRepository.save(card);
 
-        return true;
+        return "Баланс пополен";
     }
 
     @Override
-    public boolean withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
+    public String withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
         PaymentSystem paymentSystem = paymentSystemService.findBySystemName(cardWithdrawalDTO.getPaymentSystem());
         Card card = cardRepository.findByCardNumberAndPaymentSystem(cardWithdrawalDTO.getCardNumber(), paymentSystem)
-                .orElseThrow(() -> new CardNotFoundException("Карта visa не найдена"));
+                .orElseThrow(() -> new CardNotFoundException("Карта VISA не найдена"));
 
-        if (!cardUtil.withdrawIsAvailable(cardWithdrawalDTO, card)) {
-            return false;
+        if (!cardUtil.pinCodeIsCorrect(cardWithdrawalDTO, card)) {
+            throw new InvalidPinException("Неверный пин-код");
+        }
+
+        if (!cardUtil.isEnoughFunds(cardWithdrawalDTO, card)) {
+            throw new NotEnoughFundsException("Недостаточно средств на вашей карте VISA");
         }
 
         card.setBalance(card.getBalance() - cardWithdrawalDTO.getAmount());
         cardRepository.save(card);
 
-        return true;
+        return "Средства сняты!";
     }
 
     private void buildVisaCard(CardIssuanceDTO cardIssuanceDTO, Client client, PaymentSystem paymentSystem) {

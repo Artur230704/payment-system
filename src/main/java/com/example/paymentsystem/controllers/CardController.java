@@ -19,17 +19,20 @@ public class CardController {
     private final CardService cardService;
 
     @PostMapping("/api/cards/issue")
-    public ResponseEntity<Boolean> issueCard(@Valid @RequestBody CardIssuanceDTO cardIssuanceDTO) {
-        return new ResponseEntity<>(cardService.issueCard(cardIssuanceDTO), HttpStatus.OK);
+    public ResponseEntity<String> issueCard(@Valid @RequestBody CardIssuanceDTO cardIssuanceDTO) {
+        String response = cardService.issueCard(cardIssuanceDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/cards/replenish")
-    public ResponseEntity<Boolean> replenishBalance(@Valid @RequestBody CardReplenishmentDTO cardReplenishmentDTO) {
-        return new ResponseEntity<>(cardService.replenishBalance(cardReplenishmentDTO), HttpStatus.OK);
+    public ResponseEntity<String> replenishBalance(@Valid @RequestBody CardReplenishmentDTO cardReplenishmentDTO) {
+        String response = cardService.replenishBalance(cardReplenishmentDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/cards/withdraw")
-    public ResponseEntity<Boolean> withdrawFunds(@Valid @RequestBody CardWithdrawalDTO cardWithdrawalDTO) {
-        return new ResponseEntity<>(cardService.withdrawFunds(cardWithdrawalDTO), HttpStatus.OK);
+    public ResponseEntity<String> withdrawFunds(@Valid @RequestBody CardWithdrawalDTO cardWithdrawalDTO) {
+        String response = cardService.withdrawFunds(cardWithdrawalDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

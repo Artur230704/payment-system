@@ -18,14 +18,12 @@ public class CardUtil {
         return cardRepository.existsByPhoneNumberAndPaymentSystem(cardIssuanceDTO.getPhoneNumber(), paymentSystem);
     }
 
-    public boolean withdrawIsAvailable(CardWithdrawalDTO cardWithdrawalDTO, Card card) {
-        if (!card.getPinCode().equals(cardWithdrawalDTO.getPinCode())) {
-            return false;
-        }
-        if (card.getBalance() < cardWithdrawalDTO.getAmount()) {
-            return false;
-        }
-        return true;
+    public boolean pinCodeIsCorrect(CardWithdrawalDTO cardWithdrawalDTO, Card card) {
+        return card.getPinCode().equals(cardWithdrawalDTO.getPinCode());
+    }
+
+    public boolean isEnoughFunds(CardWithdrawalDTO cardWithdrawalDTO, Card card) {
+        return !(card.getBalance() < cardWithdrawalDTO.getAmount());
     }
 
     public String generateUniqueCardNumber(String format, PaymentSystem paymentSystem) {
