@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotEnoughFundsException.class)
-    public String handleNotEnoughFundsException(InvalidPinException e) {
+    public String handleNotEnoughFundsException(NotEnoughFundsException e) {
         return e.getMessage();
     }
 }

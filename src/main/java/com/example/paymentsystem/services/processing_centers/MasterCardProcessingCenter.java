@@ -57,7 +57,7 @@ public class MasterCardProcessingCenter implements PaymentProcessingStrategy {
         card.setBalance(card.getBalance() + amountToAdd);
         cardRepository.save(card);
 
-        return "Баланс пополен";
+        return "Баланс пополнен";
     }
 
     @Override
