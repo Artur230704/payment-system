@@ -28,7 +28,8 @@ public class Card {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
     private double balance;
-    private String cvv;
+    @Column(name = "pin_code")
+    private String pinCode;
     @ManyToOne
     @JoinColumn(name = "payment_system_id")
     private PaymentSystem paymentSystem;

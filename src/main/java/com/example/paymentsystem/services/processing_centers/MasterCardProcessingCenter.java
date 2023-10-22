@@ -27,6 +27,7 @@ public class MasterCardProcessingCenter implements PaymentProcessingStrategy {
     @Override
     public boolean issueCard(CardIssuanceDTO cardIssuanceDTO) {
         PaymentSystem paymentSystem = paymentSystemService.findBySystemName(cardIssuanceDTO.getPaymentSystem());
+
         if (cardUtil.isCardIssuedForPhoneNumber(cardIssuanceDTO, paymentSystem)) {
             return false;
         }
@@ -50,11 +51,23 @@ public class MasterCardProcessingCenter implements PaymentProcessingStrategy {
 
         card.setBalance(card.getBalance() + amountToAdd);
         cardRepository.save(card);
+
         return true;
     }
 
     @Override
     public boolean withdrawFunds(CardWithdrawalDTO cardWithdrawalDTO) {
+        PaymentSystem paymentSystem = paymentSystemService.findBySystemName(cardWithdrawalDTO.getPaymentSystem());
+        Card card = cardRepository.findByCardNumberAndPaymentSystem(cardWithdrawalDTO.getCardNumber(), paymentSystem)
+                .orElseThrow(() -> new CardNotFoundException("Карта visa не найдена"));
+
+        if (!cardUtil.withdrawIsAvailable(cardWithdrawalDTO, card)) {
+            return false;
+        }
+
+        card.setBalance(card.getBalance() - cardWithdrawalDTO.getAmount());
+        cardRepository.save(card);
+
         return true;
     }
 
@@ -65,7 +78,7 @@ public class MasterCardProcessingCenter implements PaymentProcessingStrategy {
                 .cardNumber(cardUtil.generateUniqueCardNumber("22212720", paymentSystem))
                 .expirationDate(LocalDate.now().plusYears(3))
                 .balance(0)
-                .cvv(cardUtil.generateCVV())
+                .pinCode(cardUtil.generatePinCode())
                 .paymentSystem(paymentSystem)
                 .build();
         cardRepository.save(card);

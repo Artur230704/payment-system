@@ -14,7 +14,7 @@ public class CardWithdrawalDTO {
     @NotNull(message = "Введите номер карты")
     private String cardNumber;
     @NotNull(message = "Введите cvv")
-    private String cvv;
+    private String pinCode;
     @Min(value = 50, message = "Минимальная сумма для снятия 50 сом")
     private double amount;
 }

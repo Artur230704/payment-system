@@ -1,6 +1,8 @@
 package com.example.paymentsystem.utils;
 
 import com.example.paymentsystem.dtos.CardIssuanceDTO;
+import com.example.paymentsystem.dtos.CardWithdrawalDTO;
+import com.example.paymentsystem.entities.Card;
 import com.example.paymentsystem.entities.PaymentSystem;
 import com.example.paymentsystem.repostiories.CardRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,16 @@ public class CardUtil {
     private final CardRepository cardRepository;
     public boolean isCardIssuedForPhoneNumber(CardIssuanceDTO cardIssuanceDTO, PaymentSystem paymentSystem) {
         return cardRepository.existsByPhoneNumberAndPaymentSystem(cardIssuanceDTO.getPhoneNumber(), paymentSystem);
+    }
+
+    public boolean withdrawIsAvailable(CardWithdrawalDTO cardWithdrawalDTO, Card card) {
+        if (!card.getPinCode().equals(cardWithdrawalDTO.getPinCode())) {
+            return false;
+        }
+        if (card.getBalance() < cardWithdrawalDTO.getAmount()) {
+            return false;
+        }
+        return true;
     }
 
     public String generateUniqueCardNumber(String format, PaymentSystem paymentSystem) {
@@ -36,15 +48,15 @@ public class CardUtil {
         return cardNumber.toString();
     }
 
-    public String generateCVV() {
+    public String generatePinCode() {
         Random random = new Random();
-        StringBuilder cvv = new StringBuilder();
+        StringBuilder pinCode = new StringBuilder();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             int digit = random.nextInt(10);
-            cvv.append(digit);
+            pinCode.append(digit);
         }
 
-        return cvv.toString();
+        return pinCode.toString();
     }
 }
