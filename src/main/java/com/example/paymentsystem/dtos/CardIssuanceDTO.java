@@ -17,6 +17,6 @@ public class CardIssuanceDTO {
     private String firstName;
     @NotNull(message = "Введите фамилию клиента")
     private String lastName;
-    @Pattern(regexp = "^(\\+996\\s?)?(\\d{3}\\s?)?\\d{6}$", message = "Введите номер телефона в формате: +996000000000")
+    @Pattern(regexp = "^(996\\s?)?(\\d{3}\\s?)?\\d{6}$", message = "Введите номер телефона в формате: 996000000000")
     private String phoneNumber;
 }

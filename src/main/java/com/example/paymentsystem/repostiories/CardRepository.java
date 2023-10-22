@@ -15,4 +15,5 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     Optional<Card> findByCardNumberAndPaymentSystem(String cardNumber, PaymentSystem paymentSystem);
     List<Card> findByClientPassportNumber(String passportNumber);
     boolean existsByPhoneNumberAndPaymentSystem(String phoneNumber, PaymentSystem paymentSystem);
+    List<Card> findByPhoneNumber(String phoneNumber);
 }
