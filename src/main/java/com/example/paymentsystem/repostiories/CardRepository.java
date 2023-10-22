@@ -11,7 +11,8 @@ import java.util.Optional;
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
     boolean existsByCardNumber(String cardNumber);
-    boolean existsByClient_PhoneNumberAndPaymentSystem(String phoneNumber, PaymentSystem paymentSystem);
+    boolean existsByCardNumberAndAndPaymentSystem(String cardNumber, PaymentSystem paymentSystem);
     Optional<Card> findByCardNumberAndPaymentSystem(String cardNumber, PaymentSystem paymentSystem);
     List<Card> findByClientPassportNumber(String passportNumber);
+    boolean existsByPhoneNumberAndPaymentSystem(String phoneNumber, PaymentSystem paymentSystem);
 }

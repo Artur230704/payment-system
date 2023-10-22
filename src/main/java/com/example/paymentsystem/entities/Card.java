@@ -21,6 +21,8 @@ public class Card {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+    @Column(name = "phone_number")
+    private String phoneNumber;
     @Column(name = "card_number")
     private String cardNumber;
     @Column(name = "expiration_date")
