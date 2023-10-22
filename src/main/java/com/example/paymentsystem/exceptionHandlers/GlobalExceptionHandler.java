@@ -42,4 +42,9 @@ public class GlobalExceptionHandler {
     public String handleNotEnoughFundsException(NotEnoughFundsException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public String handleClientNotFoundException(ClientNotFoundException e) {
+        return e.getMessage();
+    }
 }

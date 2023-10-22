@@ -2,6 +2,7 @@ package com.example.paymentsystem.services;
 
 import com.example.paymentsystem.dtos.CardIssuanceDTO;
 import com.example.paymentsystem.entities.Client;
+import com.example.paymentsystem.exceptions.ClientNotFoundException;
 import com.example.paymentsystem.mappers.ClientMapper;
 import com.example.paymentsystem.repostiories.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,10 @@ public class ClientService {
 
     public Optional<Client> findByPassportNumber(String passportNumber) {
         return clientRepository.findByPassportNumber(passportNumber);
+    }
+
+    public Client findClientByPassportNumber(String passportNumber) {
+        return clientRepository.findByPassportNumber(passportNumber)
+                .orElseThrow(() -> new ClientNotFoundException("Клиент не найден"));
     }
 }
