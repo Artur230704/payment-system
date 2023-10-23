@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class PaymentProcessingFactory {
     private final Map<String, PaymentProcessingStrategy> strategies;
 
+    // конструктор собирает все классы, которые реализовали стратегию
     @Autowired
     public PaymentProcessingFactory(List<PaymentProcessingStrategy> strategyList) {
         this.strategies = strategyList.stream()
@@ -22,11 +23,13 @@ public class PaymentProcessingFactory {
                 ));
     }
 
+    // получаем имя процессингово центра(имя возле аннотации @Service)
     private String getPaymentProcessingCenterName(Class<? extends PaymentProcessingStrategy> strategyClass) {
         Service serviceAnnotation = strategyClass.getAnnotation(Service.class);
         return (serviceAnnotation != null) ? serviceAnnotation.value() : "";
     }
 
+    // Возвращаем нужный процессинговый центр по имени платежной систмы
     public PaymentProcessingStrategy getPaymentStrategy(String paymentSystem) {
         for (Map.Entry<String, PaymentProcessingStrategy> entry : strategies.entrySet()) {
             if (entry.getKey().equalsIgnoreCase(paymentSystem)) {
