@@ -6,10 +6,7 @@ import com.example.paymentsystem.dtos.CardWithdrawalDTO;
 import com.example.paymentsystem.entities.Card;
 import com.example.paymentsystem.entities.Client;
 import com.example.paymentsystem.entities.PaymentSystem;
-import com.example.paymentsystem.exceptions.CardAlreadyIssuedException;
-import com.example.paymentsystem.exceptions.CardNotFoundException;
-import com.example.paymentsystem.exceptions.InvalidPinException;
-import com.example.paymentsystem.exceptions.NotEnoughFundsException;
+import com.example.paymentsystem.exceptions.*;
 import com.example.paymentsystem.repostiories.CardRepository;
 import com.example.paymentsystem.services.ClientService;
 import com.example.paymentsystem.services.PaymentSystemService;
@@ -50,6 +47,10 @@ public class VisaProcessingCenter implements PaymentProcessingStrategy {
         Card card = cardRepository.findByCardNumberAndPaymentSystem(cardReplenishmentDTO.getCardNumber(), paymentSystem)
                 .orElseThrow(() -> new CardNotFoundException("Карта VISA не найдена"));
 
+        if (!cardUtil.isExpired(card.getExpirationDate())) {
+            throw new CardIsExpiredException("Срок действия карты прошел");
+        }
+
         double replenishmentAmount = cardReplenishmentDTO.getAmount();
         double percent = paymentSystem.getPercent();
         double amountToAdd = replenishmentAmount - (replenishmentAmount * percent / 100);
@@ -72,6 +73,10 @@ public class VisaProcessingCenter implements PaymentProcessingStrategy {
 
         if (!cardUtil.isEnoughFunds(cardWithdrawalDTO, card)) {
             throw new NotEnoughFundsException("Недостаточно средств на вашей карте VISA");
+        }
+
+        if (!cardUtil.isExpired(card.getExpirationDate())) {
+            throw new CardIsExpiredException("Срок действия карты прошел");
         }
 
         card.setBalance(card.getBalance() - cardWithdrawalDTO.getAmount());

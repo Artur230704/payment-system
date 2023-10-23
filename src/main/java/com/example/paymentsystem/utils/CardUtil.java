@@ -8,6 +8,7 @@ import com.example.paymentsystem.repostiories.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 @Component
@@ -24,6 +25,10 @@ public class CardUtil {
 
     public boolean isEnoughFunds(CardWithdrawalDTO cardWithdrawalDTO, Card card) {
         return !(card.getBalance() < cardWithdrawalDTO.getAmount());
+    }
+
+    public boolean isExpired(LocalDate expirationDate) {
+        return expirationDate.isBefore(LocalDate.now());
     }
 
     public String generateUniqueCardNumber(String format, PaymentSystem paymentSystem) {

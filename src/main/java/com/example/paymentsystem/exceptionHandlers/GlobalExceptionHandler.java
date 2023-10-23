@@ -47,4 +47,9 @@ public class GlobalExceptionHandler {
     public String handleClientNotFoundException(ClientNotFoundException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(CardIsExpiredException.class)
+    public String handleCardIsExpiredException(CardIsExpiredException e) {
+        return e.getMessage();
+    }
 }
