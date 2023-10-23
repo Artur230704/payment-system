@@ -85,6 +85,7 @@ public class VisaProcessingCenter implements PaymentProcessingStrategy {
                 .client(client)
                 .phoneNumber(cardIssuanceDTO.getPhoneNumber())
                 .cardNumber(cardUtil.generateUniqueCardNumber("41695853", paymentSystem))
+                .issueDate(LocalDate.now())
                 .expirationDate(LocalDate.now().plusYears(5))
                 .balance(0)
                 .pinCode(cardUtil.generatePinCode())

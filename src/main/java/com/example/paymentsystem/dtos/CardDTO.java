@@ -12,6 +12,7 @@ public class CardDTO {
     private Long clientId;
     private String phoneNumber;
     private String cardNumber;
+    private LocalDate issueDate;
     private LocalDate expirationDate;
     private double balance;
     private String paymentSystemName;

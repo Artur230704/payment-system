@@ -19,6 +19,7 @@ create table if not exists cards
     id bigserial primary key,
     phone_number varchar(13) not null,
     card_number varchar(16) not null,
+    issue_date date not null,
     expiration_date date not null,
     balance double precision default 0,
     pin_code varchar(4) not null,

@@ -85,6 +85,7 @@ public class MasterCardProcessingCenter implements PaymentProcessingStrategy {
                 .client(client)
                 .phoneNumber(cardIssuanceDTO.getPhoneNumber())
                 .cardNumber(cardUtil.generateUniqueCardNumber("22212720", paymentSystem))
+                .issueDate(LocalDate.now())
                 .expirationDate(LocalDate.now().plusYears(3))
                 .balance(0)
                 .pinCode(cardUtil.generatePinCode())

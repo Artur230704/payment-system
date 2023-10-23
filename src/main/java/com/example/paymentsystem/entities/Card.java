@@ -25,6 +25,8 @@ public class Card {
     private String phoneNumber;
     @Column(name = "card_number")
     private String cardNumber;
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
     private double balance;
